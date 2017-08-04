@@ -1,5 +1,5 @@
 <template>
-  <canvas :id="id"></canvas>
+  <canvas :id="id" :class="canvasClassList"></canvas>
 </template>
 <script>
   /* eslint-disable */
@@ -9,6 +9,8 @@
     props: {
       id: String,
       name: String,
+      classes: Array,
+      bgimage: String,
       opacity: Array,
       states: Object,
       isPausedWhenNotInView: {
@@ -26,43 +28,51 @@
     },
     data () {
       return {
-        VueGranim: ''
+        GraminObject: Object,
+        canvasClassList: String
       }
     },
     computed: {
-      getOpacity () {
-        let opacity = []
-        let defaultStates =  this.states['default-state'].gradients[0]
-        this.defaultStates.foreach(state => {
-          opacity.push(.5)
-        })
+      backgroundUrl () {
+        return `url(${this.bgimage})`
       }
     },
-    beforeCreate () {
-    },
     mounted () {
-      let self = this
-      self.VueGranim = new Granim({ // eslint-disable-line
-        element: document.getElementById(self.id),
+      // Set background image if props is defined 
+      if (this.bgimage) this.setBackground()
+
+      this.GraminObject = new Granim({
+        element: document.getElementById(this.id),
         name: 'granim',
-        opacity: self.opacity,
-        isPausedWhenNotInView: self.isPausedWhenNotInView,
-        transitionSpeed: self.transitionSpeed,
-        states: self.states
+        opacity: this.opacity,
+        isPausedWhenNotInView: this.isPausedWhenNotInView,
+        transitionSpeed: this.transitionSpeed,
+        states: this.states
       })
 
       if (self.direction) {
-        self.VueGranim.direction = self.direction
+        this.GraminObject.direction = self.direction
       }
     },
     methods: {
+      setBackground () {
+        Object.assign(document.getElementById(this.id).style, {
+          'background-size': 'cover',
+          'background-image': this.backgroundUrl
+        })
+      },
       setDirection () {
       }
     },
     watch: {
-      direction (val, oldValue) {
-        var self = this
-        self.VueGranim.direction = val
+      direction (direction, oldValue) {
+        this.GraminObject.direction = direction
+      },
+      opacity (opacity, oldValue) {
+        this.GraminObject.opacity = opacity
+      },
+      bgimage (image, oldValue) {
+        this.setBackground()
       }
     }
   }

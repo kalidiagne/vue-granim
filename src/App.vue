@@ -1,18 +1,13 @@
 <template>
   <div id="app">
-    <h1>direction: {{ direction }} </h1>
-    <vue-granim id="my-id-canvas" :direction="direction" :opacity="opacity" :isPausedWhenNotInView="false" :states="states"></vue-granim>
     <div>
-      <button @click="direction = 'radial'">radial</button>
-      <button @click="direction = 'left-right'">left-right</button>
-      <button @click="direction = 'diagonal'">diagonal</button>
-    </div>
-
-    <vue-granim id="test-2" :direction="direction2" :opacity="opacity" :states="states"></vue-granim>
-    <div>
-      <button @click="direction2 = 'radial'">radial</button>
-      <button @click="direction2 = 'left-right'">left-right</button>
-      <button @click="direction2 = 'diagonal'">diagonal</button>
+      <vue-granim 
+        id="my-id-canvas"
+        bgimage="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAvCvKiaIy0XB5kVrGDrjcN_8OARfPKZ2rdTv708OUz-Qo2s85SQ"
+        :direction="direction"
+        :opacity="opacity"
+        :isPausedWhenNotInView="false"
+        :states="states"></vue-granim>
     </div>
   </div>
 </template>
@@ -31,17 +26,21 @@ export default {
       direction: 'top-bottom',
       direction2: 'radial',
       opacity: [0.4, 1],
+      classes: ['class-1', 'class-2'],
       states: {
         'default-state': {
           gradients: [
             ['#fff', '#000'],
             ['#000', '#fff']
-          ]
+          ],
+          transitionSpeed: 2000,
+          loop: true
         }
       }
     }
   },
   created () {
+    console.log(this)
   }
 }
 </script>
